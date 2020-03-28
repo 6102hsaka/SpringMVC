@@ -1,58 +1,38 @@
 package com.spring.akash.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
-
-
-
-@Entity
 public class Employee {
-
-	@Id
-	@Column(name = "Id")
-	private String Eid;
-	@Column(name = "name")
-	private String eName;
-	@Column(name="salary")
+	
+	private String id;
+	private String name;
 	private double salary;
-	@ManyToOne(targetEntity = Department.class)
-	@JoinColumn(name = "DeptId")
-	@Cascade(CascadeType.SAVE_UPDATE)
-	private Department department;
+	private String departmentId;
 	
 	public Employee() {
-		
-	}
-
-	public Employee(String eid, String eName, double salary, Department department) {
 		super();
-		Eid = eid;
-		this.eName = eName;
+	}
+	
+	public Employee(String id, String name, double salary, String departmentId) {
+		super();
+		this.id = id;
+		this.name = name;
 		this.salary = salary;
-		this.department = department;
+		this.departmentId = departmentId;
 	}
 
-
-	public String getEid() {
-		return Eid;
+	public String getId() {
+		return id;
 	}
 
-	public void setEid(String eid) {
-		Eid = eid;
+	public void setId(String id) {
+		this.id = id;
 	}
 
-	public String getEName() {
-		return eName;
+	public String getName() {
+		return name;
 	}
 
-	public void setEName(String eName) {
-		this.eName = eName;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public double getSalary() {
@@ -63,20 +43,16 @@ public class Employee {
 		this.salary = salary;
 	}
 
-	public Department getDepartment() {
-		return department;
+	public String getDepartmentId() {
+		return departmentId;
 	}
 
-	public void setDepartment(Department department) {
-		this.department = department;
+	public void setDepartmentId(String departmentId) {
+		this.departmentId = departmentId;
 	}
 
 	@Override
 	public String toString() {
-		return "Employee [Eid=" + Eid + ", eName=" + eName + ", salary=" + salary + ", department=" + department + "]";
+		return "Employee [id=" + id + ", name=" + name + ", salary=" + salary + ", departmentId=" + departmentId + "]";
 	}
-
-	
-
 }
-

@@ -1,45 +1,38 @@
 package com.spring.akash.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-
-@Entity
 public class Department {
-	@Id
-	@Column(name = "Id")
-	private String deptId;
-	@Column(name = "name")
-	private String dName;
+
+	private String id;
+	private String name;
 	
 	public Department() {
 		
 	}
-
-	public Department(String deptId, String dName) {
+	
+	public Department(String id, String name) {
 		super();
-		this.deptId = deptId;
-		this.dName = dName;
+		this.id = id;
+		this.name = name;
 	}
 
-	public String getDeptId() {
-		return deptId;
+	public String getId() {
+		return id;
 	}
 
-	public void setDeptId(String deptId) {
-		this.deptId = deptId;
+	public void setId(String id) {
+		this.id = id;
 	}
 
-	public String getdName() {
-		return dName;
+	public String getName() {
+		return name;
 	}
 
-	public void setdName(String dName) {
-		this.dName = dName;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	@Override
 	public String toString() {
-		return "Department [deptId=" + deptId + ", dName=" + dName + "]";
+		return "Department [id=" + id + ", name=" + name + "]";
 	}
 }

@@ -3,9 +3,8 @@ package com.spring.akash.dao;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.orm.hibernate5.HibernateTemplate;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.spring.akash.model.Employee;
 
@@ -13,53 +12,74 @@ import com.spring.akash.model.Employee;
 public class EmployeeDaoImpl implements EmployeeDao {
 
 	@Autowired
-	private HibernateTemplate hTemp;	
+	private JdbcTemplate jdbcTemplate;
 	
-	public void sethTemp(HibernateTemplate hTemp) {
-		this.hTemp = hTemp;
+	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+		this.jdbcTemplate = jdbcTemplate;
 	}
 	
 	@Override
-	@Transactional
 	public boolean insert(Employee employee) {
+		String sql = "INSERT INTO employee VALUES(?,?,?,?)";
 		try {
-			hTemp.save(employee);
+			int res = jdbcTemplate.update(sql,employee.getId(),employee.getName(),employee.getSalary(),employee.getDepartmentId());
+			return (res==1);
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 			return false;
 		}
-		return true;
 	}
 
 	@Override
-	@Transactional
 	public boolean update(Employee employee) {
+		String sql = "UPDATE employee SET name=?,salary=?,deptId=? WHERE id=?";
 		try {
-			hTemp.update(employee);
+			int res = jdbcTemplate.update(sql,employee.getName(),employee.getSalary(),employee.getDepartmentId(),employee.getId());
+			return (res==1);
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 			return false;
 		}
-		return true;
 	}
 
 	@Override
-	@Transactional
-	public boolean delete(Employee employee) {
+	public boolean delete(String id) {
+		String sql = "DELETE FROM employee WHERE id=?";
 		try {
-			hTemp.delete(employee);
-		} catch(Exception e) {
-			System.out.println(e.getMessage());
+			int res = jdbcTemplate.update(sql,id);
+			return (res==1);
+		} catch (Exception e) {
+			e.printStackTrace();
 			return false;
-		}
-		return true;
+		}	
 	}
 
 	@Override
-	@Transactional
+	public Employee getEmpById(String id) {
+		List<Employee> employees = null;
+		String sql = "SELECT * FROM employee WHERE id = ?";
+		try {
+			employees = jdbcTemplate.query(sql, new Object[] {id},
+					(rs,rowNum)->new Employee(rs.getString(1),rs.getString(2),rs.getDouble(3),rs.getString(4)));
+					return employees.get(0);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	@Override
 	public List<Employee> getAllEmp() {
 		List<Employee> employees = null;
-		employees = hTemp.loadAll(Employee.class);
-		return employees;
+		String sql = "SELECT * FROM employee";
+		try {
+			employees = jdbcTemplate.query(sql,
+					(rs,rowNum)->new Employee(rs.getString(1),rs.getString(2),rs.getDouble(3),rs.getString(4)));
+					return employees;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
+
 }
